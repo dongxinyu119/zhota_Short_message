@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhita.dao.Administartonuserdao">
+
+	 
+	
+	<select id="dengluAdminUser" parameterType="com.zhita.model.Administration_user" resultType="java.lang.Integer">
+		select administration_id from administration_user where 
+			administration_name=#{administration_name} and administration_password=#{administration_password}
+	</select>
+	
+	<select id="SelectUsers" parameterType="com.zhita.model.Administration_user" resultType="java.lang.Integer">
+		select administration_id from administration_user where  administration_name=#{administration_name}
+	</select>
+	
+	
+	
+
+
+</mapper>

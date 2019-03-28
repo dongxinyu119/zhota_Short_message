@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhita.dao.Userdao">
+
+
+	<select id="login" parameterType="com.zhita.model.User" resultType="java.lang.Integer">
+		select id from user where username=#{username} and password=#{password}
+	</select>
+	
+	<select id="SelectUser" parameterType="com.zhita.model.User" resultType="java.lang.Integer">
+		select id from user where username=#{username}
+	</select>
+	
+	<select id="openID" parameterType="com.zhita.model.User" resultType="java.lang.Integer">
+		select openid from user where username=#{username}
+	</select>
+	
+</mapper>

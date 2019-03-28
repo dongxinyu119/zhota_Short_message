@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhita.dao.Shortdao">
+
+		
+		
+		<select id="SelectCount" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+			select count(*) from short_message where id=#{id}
+		</select>
+		
+		
+		<select id="dengdaiShenhe" resultType="com.zhita.model.Short_message" parameterType="com.zhita.model.PageShort">
+	  select s.short_task_id,i.product,s.short_content,s.short_autograph,s.short_count,s.short_number_count,s.short_winding_number,s.short_time
+	   from Short_message s,ismg i
+	  where i.ismg_id=s.ismg_id  and short_type="等待审核" AND s.id=#{id}
+	 limit #{page},#{pagesize}
+	</select>
+	
+	
+	
+	<select id="dengdaiMessage" resultType="com.zhita.model.Short_message" parameterType="com.zhita.model.PageShort">
+	  select s.short_task_id,i.product,s.short_content,s.short_autograph,s.short_count,s.short_number_count,s.short_winding_number,s.short_time 
+	  from Short_message s,ismg i
+	  where i.ismg_id=s.ismg_id and short_type="发送成功" AND s.id=#{id}
+	 limit #{page},#{pagesize}
+	</select>
+	
+	
+	
+	<select id="ShortMessageOk" resultType="com.zhita.model.Short_message" parameterType="com.zhita.model.PageShort">
+	  select s.short_task_id,product,s.short_content,s.short_autograph,s.short_count,s.short_number_count,s.short_winding_number,s.short_time 
+	  from Short_message s,ismg i
+	  <where>
+	  	AND s.id=#{id}
+	  	<if test="short_type != null  and short_type != ''">
+	  		AND s.short_type =#{short_type}
+	  	</if>
+	  	<if test="statusTime != null and statusTime != '' and endTime != null and endTime != ''">
+			AND s.short_time between #{statusTime} and #{endTime}
+		</if>
+	  </where>
+	 limit #{page},#{pagesize}
+	</select>
+	
+	
+	<select id="SelectNumber" parameterType="java.lang.String" resultType="java.lang.String">
+		select short_phone_number from Short_send_out where short_task_id=#{short_task_id}
+	</select>
+	
+	
+	<delete id="deleteShenhe" parameterType="java.lang.Integer" >
+		delete from short_message where short_message_id=#{short_message_id}
+	</delete>
+		
+		
+	<insert id="InsertShort" parameterType="com.zhita.model.Short_message">
+		insert into short_message values(null,#{short_task_id},#{ismg_id},#{short_content},#{short_count},#{short_number_count},#{short_winding_number},#{short_time},#{id},#{short_autograph},#{short_type},#{send_time},#{numbers})
+	</insert>
+	
+	<select id="SelectShort_messageid" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select short_message_id from Short_message where short_task_id=#{short_task_id}
+	</select>
+	
+	<insert id="InsetShortNumber" parameterType="com.zhita.model.short_number">
+		insert into short_number values(null,#{short_send_type},#{label_id},#{short_numbers},#{short_message_id})
+	</insert>
+		
+		
+		
+		
+		
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhita.dao.ShortsendReplydao">
+
+
+	<insert id="AddShortOut" parameterType="com.zhita.model.Short_send_out">
+		insert into Short_send_out values(null,short_task_id,short_phone_number,short_time,short_autograph,
+		short_content,short_type,short_result,short_return,short_receipt_time,short_message_id)
+	</insert>
+	
+	
+	<select id="SelectNumber" parameterType="java.lang.String" resultType="java.lang.String">
+		select short_phone_number from Short_send_out where short_task_id=#{short_task_id}
+	</select>
+	
+	
+	<select id="SelectMoH" parameterType="com.zhita.model.PageShortSend" resultType="com.zhita.model.Short_send_out">
+		select * from Short_send_out se,short_message s
+		<where>
+			AND s.short_message_id=se.short_message_id
+			<if test="short_type != null and short_type != ''">
+			AND se.short_type = #{short_type}
+			</if>
+			<if test="statu_time != null and statu_time != '' and end_time !=null and end_time != ''">
+			AND se.short_time between #{statu_time} and#{end_time}
+			</if>
+			<if test="short_phone_number != null and short_phone_number != ''">
+			AND se.short_phone_number LIKE concat('%',#{short_phone_number},'%')
+			</if>	
+			<if test="short_task_id != null and short_task_id != ''">
+			AND se.short_task_id LIKE ('%',#{short_task_id},'%')
+			</if>
+			AND s.id=#{id}
+		</where>
+		limit #{page},#{pagesize}
+	</select>
+	
+	
+	<select id="selectTest" resultType="com.zhita.model.Testing">
+		select * from Testing
+	</select>
+
+</mapper>

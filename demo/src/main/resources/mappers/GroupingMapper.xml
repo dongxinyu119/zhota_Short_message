@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhita.dao.Groupingdao">
+
+	 
+	
+	<select id="SelectGrop" resultType="com.zhita.model.Grouping" parameterType="com.zhita.model.Pagegroup">
+	select * from grouping where id=#{id} limit #{page},10
+	</select>
+	
+	
+	<insert id="InsertGrou" parameterType="com.zhita.model.Grouping">
+		insert into grouping values(null,#{grouping_name},#{grouping_date},#{id})
+	</insert>
+	
+	
+	<delete id="DeletAllGrou" parameterType="java.lang.String">
+		delete from grouping where grouping_id in
+		<foreach item="ids" collection="array" index="no" open="(" separator="," close=")">
+			#{ids}
+		</foreach>
+	</delete>
+	
+	
+	<delete id="DeleteOne" parameterType="java.lang.Integer">
+		delete from grouping where grouping_id=#{grouping_id}
+	</delete>
+	
+	
+	<select id="SelePageConut" resultType="java.lang.Integer">
+		select count(*) from grouping where id=#{id}
+	</select>
+	
+	
+	<select id="SelectGroupName" parameterType="com.zhita.model.Grouping" resultType="java.lang.Integer">
+		select grouping_id from Grouping where grouping_name=#{grouping_name} and id=#{id}
+	</select>
+	
+
+
+</mapper>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhita.dao.Short_messagedao">
+
+
+		
+		<select id="SelectCount" parameterType="com.zhita.model.PageShort" resultType="java.lang.Integer">
+				select count(*) from Short_message
+		</select>
+		
+		
+		<select id="SelectPage" parameterType="com.zhita.model.PageShort" resultType="com.zhita.model.Short_message">
+				select * from Short_message where short_type="等待审核" limit #{page},#{pagesize}
+
+		</select>
+		
+		<update id="UpdateShotype" parameterType="java.lang.String">
+		update Short_message set short_type="驳回" where short_task_id=#{short_task_id}
+		</update>
+		
+		<insert id="InserShot" parameterType="com.zhita.model.Short_send_out">
+			insert into Short_send_out values(null,short_task_id,short_phone_number,short_time,short_autograph,short_content,short_type,short_result,short_return,short_receipt_time,short_message_id)
+		</insert>
+		
+		<select id="ShortMessageOk" resultType="com.zhita.model.Short_message" parameterType="com.zhita.model.PageShort">
+		  select s.short_task_id,i.product,s.short_type,s.short_content,s.short_autograph,s.short_count,s.short_number_count,s.short_winding_number,s.short_time,s.send_time 
+		  from Short_message s,ismg i
+		  <where>
+		  		AND s.ismg_id=i.ismg_id
+		  	<if test="short_type != null and short_type != ''">
+		  		AND s.short_type =#{short_type}
+		  	</if>
+		  	<if test="statusTime != null and statusTime != '' and endTime != null and endTime != ''">
+				AND s.short_time between #{statusTime} and #{endTime}
+			</if>
+			<if test="statusTime != null and statusTime != '' and endTime != null and endTime != ''">
+				AND s.send_time between #{statusTime} and #{endTime}
+			</if>
+			<if test="short_task_id != null and short_task_id != ''">
+				AND s.short_task_id =#{short_task_id}
+			</if>
+		  </where>
+		 limit #{page},#{pagesize}
+		</select>
+		
+		
+		<update id="Shortsend" parameterType="com.zhita.model.Short_message">
+			update Short_message set short_type=#{short_type},send_time=#{send_time},short_winding_number=#{short_winding_number} where short_task_id=#{short_task_id}
+		</update>
+		
+		<insert id="InsertIntoShort" parameterType="com.zhita.model.Short_send_out">
+			insert into short_send_out values(null,#{short_task_id},#{short_phone_number},#{short_time},#{short_autograph},#{short_content},#{short_type},#{short_result},#{short_receipt_time},#{short_message_id})
+		</insert>
+		
+		
+		<insert id="insertIms" parameterType="com.zhita.model.Ismg">
+			insert into Ismg values(null,product,num)
+		</insert>
+		
+		
+		<delete id="delete_name" >
+			delete from ismg
+		</delete>
+		
+		
+		<select id="SelectIsm" resultType="com.zhita.model.Ismg">
+			select * from ismg
+		</select>
+		
+		
+		<select id="nums" resultType="java.lang.String" parameterType="java.lang.Integer">
+			select short_numbers from short_number where short_message_id=#{short_message_id}
+		</select>
+		
+		
+		<insert id="InsertIntoFina" parameterType="com.zhita.model.Financial_statement">
+			insert into Financial_statement values(null,#{product},#{flow_type},#{flow_count},#{operator},#{operator_time},#{id})
+		</insert>
+		
+		
+		<update id="UpdateCount" parameterType="com.zhita.model.Ismg">
+			update ismg set num=#{num} where ismg_id=#{ismg_id}
+		</update>
+		
+		
+		<select id="SelectShortMessage" parameterType="java.lang.Integer" resultType="com.zhita.model.Short_message">
+			select * from Short_message where short_message_id=#{short_message_id}
+		</select>
+		
+		
+		<select id="OneIsmg" parameterType="java.lang.Integer" resultType="com.zhita.model.Ismg">
+			select * from ismg where ismg_id=#{ismg_id}
+		</select>
+		
+		
+		<select id="SelectOpen" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+			Select openid from user where id=#{id}
+		</select>
+		
+		
+		<select id="SelectRechargeid" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+			select recharge_id from short_recharge where open_id=#{open_id}
+		</select>
+		
+		
+		<update id="rechaCount" parameterType="com.zhita.model.Short_recharge">
+			update Short_recharge set short_count=#{short_count} where recharge_id=#{recharge_id}
+		</update>
+		
+		
+		<select id="SelectRechar" parameterType="java.lang.Integer" resultType="com.zhita.model.Short_recharge">
+			select * from Short_recharge where recharge_id=#{recharge_id}
+		</select>
+		
+		
+		
+		
+		
+
+	
+</mapper>

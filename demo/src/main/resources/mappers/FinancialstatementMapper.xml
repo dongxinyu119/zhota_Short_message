@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhita.dao.Financialstatementdao">
+
+	 
+	
+	<select id="SelectFina" resultType="com.zhita.model.Financial_statement" parameterType="com.zhita.model.Pagefinancial">
+	select product,flow_type,flow_count,operator,operator_time from Financial_statement
+	<where>
+		AND id=#{id}
+		<if test="flow_type != null and flow_type != ''">
+			AND flow_type LIKE concat('%',#{flow_type},'%')
+		</if>
+		<if test="statu_time != null and statu_time != '' and end_time != null and end_time != ''">
+			AND operator_time between #{statu_time} and#{end_time}
+		</if>
+	</where>
+	 limit #{page},#{pagesize}
+	</select>
+	
+	
+	
+	
+	<select id="SelectDayFina" resultType="com.zhita.model.Financial_statement" parameterType="com.zhita.model.Pagefinancial">
+	SELECT product,flow_type,SUM(flow_count) as flow_count,DATE_FORMAT(operator_time,'%Y-%m-%d') as operator_time FROM financial_statement
+ 	<where>
+ 		AND id=#{id}
+		<if test="flow_type != null and flow_type != ''">
+			AND `flow_type` LIKE concat('%',#{flow_type},'%')
+		</if>
+		<if test="statu_time != null and statu_time != '' and end_time != null and end_time != ''">
+			AND operator_time between #{statu_time} and#{end_time}
+		</if>
+	</where>
+ 	GROUP BY DATE_FORMAT(operator_time,'%Y-%m-%d'),flow_type
+ 	limit #{page},#{pagesize}
+	</select>
+	
+	
+	<select id="SelectMontFina" resultType="com.zhita.model.Financial_statement" parameterType="com.zhita.model.Pagefinancial">
+	SELECT product,flow_type,SUM(flow_count) as flow_count,DATE_FORMAT(operator_time,'%Y-%m-%d') as operator_time FROM financial_statement
+	<where>
+		AND id=#{id}
+		<if test="flow_type != null and flow_type != ''">
+			AND `flow_type` LIKE concat('%',#{flow_type},'%')
+		</if>
+		<if test="statu_time != null and statu_time != '' and end_time != null and end_time != ''">
+			AND operator_time between #{statu_time} and#{end_time}
+		</if>
+	</where>
+	GROUP BY DATE_FORMAT(operator_time,'%Y-%m'),flow_type
+ 	limit #{page},#{pagesize}
+	</select>
+	
+	
+	<select id="SelectFinacials" resultType="Map" parameterType="com.zhita.model.Pagefinancial">
+		select product,flow_type,flow_count,operator,operator_time from Financial_statement
+	<where>
+		AND id=#{id}
+		<if test="flow_type != null and flow_type != ''">
+			AND `flow_type` LIKE concat('%',#{flow_type},'%')
+		</if>
+		<if test="statu_time != null and statu_time != '' and end_time != null and end_time != ''">
+			AND operator_time between #{statu_time} and#{end_time}
+		</if>
+	</where>
+	limit #{page},#{pagesize}
+	</select>
+	
+	
+	<select id="SelectFinacialsDay" resultType="Map" parameterType="com.zhita.model.Pagefinancial">
+	SELECT product,flow_type,SUM(flow_count) as flow_count,DATE_FORMAT(operator_time,'%Y-%m-%d') as operator_time  FROM financial_statement
+ 	<where>
+ 		AND id=#{id}
+		<if test="flow_type != null and flow_type != ''">
+			AND `flow_type` LIKE concat('%',#{flow_type},'%')
+		</if>
+		<if test="statu_time != null and statu_time != '' and end_time != null and end_time != ''">
+			AND operator_time between #{statu_time} and#{end_time}
+		</if>
+	</where>
+ 	GROUP BY DATE_FORMAT(operator_time,'%Y-%m-%d'),flow_type
+ 	limit #{page},#{pagesize}
+	</select>
+	
+	
+	
+	<select id="SelectFinacialsMoth" resultType="Map" parameterType="com.zhita.model.Pagefinancial">
+	SELECT product,flow_type,SUM(flow_count) as flow_count,DATE_FORMAT(operator_time,'%Y-%m') as operator_time  FROM financial_statement 
+	<where>
+		AND id=#{id}
+		<if test="flow_type!=null">
+			AND flow_type LIKE concat('%',#{flow_type},'%')
+		</if>
+		<if test="statu_time != null and end_time != null">
+			AND operator_time between #{statu_time} and#{end_time}
+		</if>
+	</where>
+	GROUP BY DATE_FORMAT(operator_time,'%Y-%m'),flow_type
+	limit #{page},#{pagesize}
+	</select>
+	
+	
+	
+	
+	
+	<select id="SelePageConut" resultType="java.lang.Integer" parameterType="com.zhita.model.Pagefinancial">
+		select count(*) from Financial_statement
+		<where>
+		AND id=#{id}
+		</where>
+	</select>
+	
+	
+	
+	<select id="SelectFeny" resultType="com.zhita.model.Financial_statement" parameterType="java.lang.Integer">
+		select * from Financial_statement where id=#{id} limit #{page},2
+	</select>
+	
+	
+	<select id="SelectFinacialsShortSendOut" resultType="Map"  parameterType="com.zhita.model.PageShortSend">
+		select * from Short_send_out
+		<where>
+			AND id=#{id}
+			<if test="short_type != null and short_type != ''">
+			AND `short_type` LIKE concat('%',#{short_type},'%')
+			</if>
+			<if test="statu_time != null and statu_time != '' and end_time != null and end_time != ''">
+			AND short_time between #{statu_time} and#{end_time}
+			</if>
+			<if test="short_phone_number != null and short_phone_number != ''">
+			AND `short_phone_number` LIKE concat('%',#{short_phone_number},'%')
+			</if>
+			<if test="short_task_id != null short_task_id != ''">
+			AND `short_task_id` LIKE concat('%',#{short_task_id},'%')
+			</if>
+		</where>
+		limit #{page},#{pagesize}
+	</select>
+	
+
+</mapper>

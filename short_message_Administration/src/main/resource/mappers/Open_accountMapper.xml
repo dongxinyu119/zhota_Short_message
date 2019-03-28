@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhita.dao.Openaccountdao">
+
+
+	<insert id="InsertOpenacc" parameterType="com.zhita.model.Open_account">
+		insert into Open_account values(null,#{corporate_name},#{customer_name},#{username},#{password},#{business_license})
+	</insert>
+
+	<insert id="AddUser" parameterType="com.zhita.model.User">
+		insert into User values(null,#{username},#{password},#{openid})
+	</insert>
+	
+	<select id="SelectUserName" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select open_id from Open_account where username=#{username}
+	</select>
+	
+	<select id="Selectcorporate_name" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select open_id from Open_account where corporate_name=#{corporate_name}
+	</select>
+	
+	<delete id="DeleteOpenaId" parameterType="java.lang.Integer">
+		delete from Open_account where open_id=#{open_id}
+	</delete>
+	
+	<update id="UpdateOpenacc" parameterType="com.zhita.model.Open_account">
+		update Open_account set corporate_name=#{corporate_name},customer_name=#{customer_name},username=#{username},password=#{password},business_license=#{business_license} where open_id=#{open_id} 
+	</update>
+	
+	<select id="AllOpena" parameterType="com.zhita.model.Open_account" resultType="com.zhita.model.Open_account">
+		select * from Open_account limit #{page},#{pagesize}
+	</select>
+	
+	<select id="SelectCount" resultType="java.lang.Integer">
+		select count(*) from Open_account
+	</select>
+	
+</mapper>

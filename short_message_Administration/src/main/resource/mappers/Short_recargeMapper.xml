@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhita.dao.Short_recargedao">
+
+	 
+	
+	<select id="SelectMoHurecarge" resultType="com.zhita.model.Short_recharge" parameterType="com.zhita.model.Pagerecarge">
+		select r.recharge_id,o.customer_name,o.username,o.corporate_name,r.short_count,r.recharge_time from Short_recharge r,Open_account o
+		<where>
+			AND r.open_id=o.open_id
+			<if test="corporate_name != null and corporate_name != ''">
+				AND o.corporate_name  LIKE concat('%',#{corporate_name},'%')
+			</if>
+			<if test="username != null and username != ''">
+				AND o.username=#{username}
+			</if>
+			<if test="customer_name != null and customer_name != ''">
+				AND o.customer_name LIKE concat('%',#{username},'%')
+			</if>
+		</where>
+		limit #{page},#{pagesize} 
+	</select>
+	
+	 
+	<select id="SelectCount" resultType="java.lang.Integer">
+		select count(*) from Short_recharge
+	</select>
+	
+	
+	<insert id="Insertrecharge" parameterType="com.zhita.model.Short_recharge">
+		insert into short_recharge values(null,#{open_id},#{short_count},#{recharge_time})
+	</insert>
+	
+	
+	<update id="UpdateShort_recharge" parameterType="com.zhita.model.Short_recharge">
+		update short_recharge set short_count=#{short_count},recharge_time=#{recharge_time} where recharge_id=#{recharge_id}
+	</update>
+	
+	
+	<insert id="InsertShort_recharge_record" parameterType="com.zhita.model.Shortrecord">
+		insert into Shortrecord values(null,#{recharge_short_count},#{recharge_short_time},#{recharge_id})
+	</insert>
+	
+	
+	<select id="SelectRecord" parameterType="java.lang.Integer" resultType="com.zhita.model.Shortrecord">
+		select * from Shortrecord where recharge_id=#{recharge_id}
+	</select>
+	
+
+
+</mapper>

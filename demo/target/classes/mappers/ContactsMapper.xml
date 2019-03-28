@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhita.dao.Contactsdao">
+
+	 
+	
+	<select id="MohuSelect" resultType="com.zhita.model.Contacts" parameterType="com.zhita.model.PageContacts">
+	select c.contacts_id,c.contacts_name,c.phone_number,g.grouping_name,c.contacts_remarks from contacts c,grouping g
+	<where>
+	c.grouping_id=g.grouping_id
+	<if test="contacts_name != null and contacts_name != ''">
+	AND c.contacts_name LIKE concat('%',#{contacts_name},'%')
+	</if>
+	<if test="phone_number != null and phone_number != ''">
+	AND c.phone_number LIKE concat('%',#{phone_number},'%')
+	</if>
+	<if test="grouping_id != null and grouping_id != ''">
+	AND c.grouping_id = #{grouping_id}
+	</if>
+	<if test="id !=null">
+	AND c.id = #{id}
+	</if>
+	limit #{page},#{pagesize}
+	</where>
+	</select>
+	
+	
+	
+	<!--  <insert id="InsertCon" parameterType="com.zhita.model.Contacts">
+		insert into Contacts 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="contacts_id!=null">
+				contacts_id
+			</if>
+			<if test="contacts_name!=null">
+				contacts_name
+			</if>
+			<if test="phone_number!=null">
+				phone_number
+			</if>
+			<if test="contacts_remarks!=null">
+				contacts_remarks
+			</if>
+			<if test="id!=null">
+				id
+			</if>
+			grouping_name
+		</trim>
+	</insert>-->
+	
+	
+	<insert id="InsertCon" parameterType="com.zhita.model.Contacts">
+		insert into Contacts values(null,#{contacts_name},#{phone_number},#{contacts_remarks},#{id},#{grouping_id})
+	</insert>
+	
+	
+	<delete id="DeletAllCon" parameterType="java.lang.String">
+		delete from contacts where contacts_id in
+		<foreach item="ids" collection="array" index="no" open="(" separator="," close=")">
+			#{ids}
+		</foreach>
+	</delete>
+	
+	
+	<select id="SelePageConut" resultType="java.lang.Integer">
+		select count(*) from contacts
+	</select>
+	
+	
+	<update id="GroupingName" parameterType="com.zhita.model.Contacts">
+    update contacts
+    <set>
+      <if test="grouping_id != null">
+        grouping_id = #{grouping_id},
+      </if>
+    </set>
+    where contacts_id = #{contacts_id}
+    And id=#{id}
+  </update>
+	
+	
+	
+
+
+</mapper>
